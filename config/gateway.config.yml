@@ -1,0 +1,134 @@
+http:
+  port: 8080
+
+admin:
+  port: 9876
+  host: localhost
+
+apiEndpoints:
+  cours:
+    host: '*'
+    paths: '/api/cours*'
+  sections:
+    host: '*'
+    paths: '/api/sections*'
+  depot:
+    host: '*'
+    paths: '/api/depot*'
+  document:
+    host: '*'
+    paths: '/api/document*'
+  assignments:
+    host: '*'
+    paths: '/api/assignments*'
+  evenements:
+    host: '*'
+    paths: '/api/evenements*'
+  participations:
+    host: '*'
+    paths: '/api/participations*'
+  foyers:
+    host: '*'
+    paths: '/api/foyers*'
+  chambres:
+    host: '*'
+    paths: '/api/chambres*'
+  demandes:
+    host: '*'
+    paths: '/api/demandes*'
+  offres:
+    host: '*'
+    paths: '/api/offre*'
+  candidatures:
+    host: '*'
+    paths: '/api/candidature*'
+  matching:
+    host: '*'
+    paths: '/api/matching*'
+  users:
+    host: '*'
+    paths: '/api/user*'
+  competences:
+    host: '*'
+    paths: '/api/competences*'
+  experiences:
+    host: '*'
+    paths: '/api/experiences*'
+  educations:
+    host: '*'
+    paths: '/api/educations*'
+
+serviceEndpoints:
+  coursService:
+    url: 'http://cours_service:3007'
+  evenementsService:
+    url: 'http://evenement_service:3006'
+  foyersService:
+    url: 'http://foyer_service:3004'
+  offresService:
+    url: 'http://offre_service:3003'
+  usersService:
+    url: 'http://user_service:3001'
+
+policies:
+  - cors
+  - key-auth
+  - proxy
+
+pipelines:
+  coursPipeline:
+    apiEndpoints:
+      - cours
+      - sections
+      - depot
+      - document
+      - assignments
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: coursService
+              changeOrigin: true
+
+  evenementsPipeline:
+    apiEndpoints:
+      - evenements
+      - participations
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: evenementsService
+              changeOrigin: true
+
+  foyersPipeline:
+    apiEndpoints:
+      - foyers
+      - chambres
+      - demandes
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: foyersService
+              changeOrigin: true
+
+  offresPipeline:
+    apiEndpoints:
+      - offres
+      - candidatures
+      - matching
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: offresService
+              changeOrigin: true
+
+  usersPipeline:
+    apiEndpoints:
+      - users
+      - competences
+      - experiences
+      - educations
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: usersService
+              changeOrigin: true
